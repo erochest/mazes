@@ -16,6 +16,7 @@ var paths = {
 };
 
 var options = {
+    main: "Mazes",
     output: 'main.js'
 };
 

@@ -5541,4 +5541,5 @@ PS.Data_StrMap_Unsafe = (function () {
         unsafeIndex: unsafeIndex
     };
 })();
+PS.Mazes.main();
 
