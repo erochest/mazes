@@ -8,8 +8,8 @@ var gulp = require('gulp')
 var paths = {
     src: 'src/**/*.purs',
     bowerSrc: [
-      'bower_components/purescript-*/src/**/*.purs',
-      'bower_components/purescript-*/src/**/*.purs.hs'
+      'app/bower_components/purescript-*/src/**/*.purs',
+      'app/bower_components/purescript-*/src/**/*.purs.hs'
     ],
     dest: 'app/scripts',
     docsDest: 'README.md'
