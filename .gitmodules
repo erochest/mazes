@@ -1,0 +1,4 @@
+[submodule "dist"]
+	path = dist
+	url = git@github.com:erochest/mazes.git
+	branch = gh-pages
