@@ -1,11 +1,52 @@
 'use strict';
 // generated on 2014-11-21 using generator-gulp-webapp 0.1.0
 
-var gulp = require('gulp');
+var gulp = require('gulp')
+  , purescript = require('gulp-purescript')
+  ;
+
+var paths = {
+    src: 'src/**/*.purs',
+    bowerSrc: [
+      'bower_components/purescript-*/src/**/*.purs',
+      'bower_components/purescript-*/src/**/*.purs.hs'
+    ],
+    dest: 'app/scripts',
+    docsDest: 'README.md'
+};
+
+var options = {};
 
 // load plugins
 var $ = require('gulp-load-plugins')();
 
+var compile = function(compiler) {
+    var psc = compiler(options);
+    psc.on('error', function(e) {
+        console.error(e.message);
+        psc.end();
+    });
+    return gulp.src([paths.src].concat(paths.bowerSrc))
+        .pipe(psc)
+        .pipe(gulp.dest(paths.dest));
+};
+
+// PureScript tasks
+gulp.task('make', function() {
+    return compile(purescript.pscMake);
+});
+
+gulp.task('browser', function() {
+    return compile(purescript.psc);
+});
+
+gulp.task('docs', function() {
+    return gulp.src(paths.src)
+      .pipe(purescript.pscDocs())
+      .pipe(gulp.dest(paths.docsDest));
+});
+
+// 
 gulp.task('styles', function () {
     return gulp.src('app/styles/main.scss')
         .pipe($.rubySass({
@@ -17,10 +58,8 @@ gulp.task('styles', function () {
         .pipe($.size());
 });
 
-gulp.task('scripts', function () {
+gulp.task('scripts', ['browser'], function () {
     return gulp.src('app/scripts/**/*.js')
-        .pipe($.jshint())
-        .pipe($.jshint.reporter(require('jshint-stylish')))
         .pipe($.size());
 });
 
@@ -67,10 +106,11 @@ gulp.task('extras', function () {
 });
 
 gulp.task('clean', function () {
-    return gulp.src(['.tmp', 'dist'], { read: false }).pipe($.clean());
+    return gulp.src(['.tmp', 'dist', 'app/scripts/psc.js'], { read: false })
+        .pipe($.clean());
 });
 
-gulp.task('build', ['html', 'images', 'fonts', 'extras']);
+gulp.task('build', ['browser', 'html', 'images', 'fonts', 'extras']);
 
 gulp.task('default', ['clean'], function () {
     gulp.start('build');
@@ -131,4 +171,6 @@ gulp.task('watch', ['connect', 'serve'], function () {
     gulp.watch('app/scripts/**/*.js', ['scripts']);
     gulp.watch('app/images/**/*', ['images']);
     gulp.watch('bower.json', ['wiredep']);
+    gulp.watch(paths.src, ['browser', 'docs']);
 });
+

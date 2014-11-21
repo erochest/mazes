@@ -4,3 +4,8 @@ dist
 .sass-cache
 app/bower_components
 test/bower_components
+/.*
+!/.gitignore
+output/
+app/scripts/psc.js
+tmp/
