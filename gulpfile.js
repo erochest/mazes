@@ -15,7 +15,9 @@ var paths = {
     docsDest: 'README.md'
 };
 
-var options = {};
+var options = {
+    output: 'main.js'
+};
 
 // load plugins
 var $ = require('gulp-load-plugins')();
@@ -110,7 +112,7 @@ gulp.task('clean', function () {
         .pipe($.clean());
 });
 
-gulp.task('build', ['browser', 'html', 'images', 'fonts', 'extras']);
+gulp.task('build', ['html', 'images', 'fonts', 'extras']);
 
 gulp.task('default', ['clean'], function () {
     gulp.start('build');
